@@ -11,14 +11,18 @@ import java.io.Console;
  *
  * @author Kappa123
  */
+
+
 public class Kompresja {
 
    
     public static void main(String[] args) {
         
-        Scanner input = new Scanner(System.in);
-        String s = input.nextLine();
-        System.out.println(s);
+        Frequency f = new Frequency();
+        f.get_input();
+        f.calculate_frequency();
+        
+        //System.out.println(f.s);
         
         
     }
