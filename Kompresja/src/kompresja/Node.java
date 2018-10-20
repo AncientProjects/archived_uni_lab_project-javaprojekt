@@ -10,6 +10,13 @@ package kompresja;
  * @author asdf123
  */
 public class Node {
+    Node() {}
+    Node(char _id, int _value) {
+        id = _id;
+        value = _value;
+        left = null;
+        right = null;
+    }
     char id;
     int value;
     
