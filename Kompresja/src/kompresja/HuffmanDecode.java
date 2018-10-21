@@ -9,6 +9,6 @@ package kompresja;
  *
  * @author Kappa123
  */
-public class Huffman {
+public class HuffmanDecode {
     
 }
