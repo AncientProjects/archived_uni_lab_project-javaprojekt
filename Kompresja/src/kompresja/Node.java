@@ -19,6 +19,14 @@ public class Node {
         right = null;
     }
     
+    Node(Node node) {
+        id = node.id;
+        value = node.value;
+        code = node.code;
+        left = node.left;
+        right = node.right;
+    }
+    
     public void setId(char _id){
         id = _id;
     }

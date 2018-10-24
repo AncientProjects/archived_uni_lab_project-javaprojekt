@@ -54,17 +54,21 @@ public class HuffmanCode {
     }
     
     public String codeString(String s, PriorityQueue<Node> pq){
-        String code = null;
+        String code = "";
         Node[] arr = pq.toArray(new Node[pq.size()]);
         for(int i = 0; i < s.length(); i++){
             for(int o = 0; o < pq.size(); o++){
-                if(s.charAt(i) == arr[o].getId())
+                if(s.charAt(i) == arr[o].getId()){
                     //code += arr[o].value;
                     //code += Integer.toString(arr[o].getValue());
+                    
                     System.out.print(arr[o].code);
+                    code += arr[o].code;
+                }
             }
         }
         
+        System.out.println("\n" + code);
         //for(int i = 0; i < arr.length; i++)
         //    System.out.println(Integer.toString(arr[i].getValue()));
         
