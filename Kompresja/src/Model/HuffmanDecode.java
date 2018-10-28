@@ -3,23 +3,27 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package kompresja;
+package Model;
 
 /**
  *
- * @author Kappa123
+ * @author Adam Olechno
  */
+
+//class for decoding the code with pre-existing tree functioning as a key
 public class HuffmanDecode {
+    
+    
     public String decodeHuffman(Node root, String s) {
         String decodedString = "";
         Node temp = root;
         for(int i = 0; i < s.length(); i++){
             if(s.charAt(i) == '0')
-                temp = temp.left;
+                temp = temp.getLeft();
             else if (s.charAt(i) == '1')
-                temp = temp.right;
+                temp = temp.getRight();
             
-            if(temp.left == null || temp.right == null){
+            if(temp.getLeft() == null || temp.getRight() == null){
                 decodedString += temp.getId();
                 temp = root;
             }

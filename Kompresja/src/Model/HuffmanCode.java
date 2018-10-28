@@ -3,29 +3,20 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package kompresja;
+package Model;
 
-import java.util.Comparator;
 import java.util.PriorityQueue;
 
 /**
  *
- * @author Kappa123
+ * @author Adam Olechno
  */
 
-//komparator pozwala zamknąć dodawanie nowych węzlów do kolejki priorytetowej w kolejności od najmniejszego do największego w jednej linijce
-class Comp implements Comparator<Node> {
-        public int compare(Node x, Node y){
-            return x.getValue() - y.getValue();
-        }
-}
 
+//the class with huffman code 
 public class HuffmanCode {
     
-    HuffmanCode(){
-        
-    }
-    public Node createTree(String s, PriorityQueue<Node> pq) {
+    public Node createTreeFromPriorityQueue(PriorityQueue<Node> pq) {
         
         Node root = null;
         
@@ -36,8 +27,8 @@ public class HuffmanCode {
             pq.poll();
             
             Node z = new Node('-', x.getValue() + y.getValue());
-            z.left = x;
-            z.right = y;
+            z.setLeft(x);
+            z.setRight(y);
             pq.add(z);
             root = z;
         }
@@ -45,12 +36,12 @@ public class HuffmanCode {
     }
     
     public void codeCharacters(Node root, String s){
-        if(root.left == null && root.right == null){
+        if(root.getLeft() == null && root.getRight() == null){
             root.setCode(s);
             return;
         }
-        codeCharacters(root.left, s + "0");
-        codeCharacters(root.right, s + "1");
+        codeCharacters(root.getLeft(), s + "0");
+        codeCharacters(root.getRight(), s + "1");
     }
     
     public String codeString(String s, PriorityQueue<Node> pq){
@@ -62,8 +53,8 @@ public class HuffmanCode {
                     //code += arr[o].value;
                     //code += Integer.toString(arr[o].getValue());
                     
-                    System.out.print(arr[o].code);
-                    code += arr[o].code;
+                    System.out.print(arr[o].getCode());
+                    code += arr[o].getCode();
                 }
             }
         }
@@ -75,5 +66,4 @@ public class HuffmanCode {
         return code;
     }
     
-    public Frequency f;
 }

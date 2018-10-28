@@ -3,7 +3,8 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package kompresja;
+package Model;
+
 
 import java.util.HashMap;
 import java.util.PriorityQueue;
@@ -11,18 +12,15 @@ import java.util.Scanner;
 
 /**
  *
- * @author asdf123
+ * @author Adam Olechno
  */
+
+
+
 public class Frequency {
-    
-        public HashMap<Character, Integer> map = new HashMap<Character, Integer>();
-        public Node[] tabn = null;
-        public PriorityQueue<Node> pq = null;
         
-        Frequency(){
-            
-        }
-        
+        /*this function creates a HashMap object that is filled with individual characters as keys
+        and the number of times they appeared as frequency*/
         public void createMap(String s){
                     
             for(int i = 0; i < s.length(); i++){
@@ -37,6 +35,8 @@ public class Frequency {
         
         }
         
+        /*adding contents of HashMap to a Priority Queue simultaneously using a Comparator
+        to add the contents based on frequency value of individual */
         public PriorityQueue<Node> addToPriorityQueue(String s){
             
             createMap(s);
@@ -46,7 +46,7 @@ public class Frequency {
             
             tabn = new Node[map.size()];
             int i = 0;
-        for (char key : map.keySet())
+            for (char key : map.keySet())
             {
                 tabn[i] = new Node(key, map.get(key));
                 i++;
@@ -55,8 +55,6 @@ public class Frequency {
             pq = new PriorityQueue<Node>(map.size(), new Comp());
 
             for (int o = 0; o < map.size(); o++){
-                //Node hn = new Node(tabc[o], tabi[o]);
-                //pq.add(hn);
                 pq.add(tabn[o]);
             }
             
@@ -64,4 +62,12 @@ public class Frequency {
             PriorityQueue<Node> pq_clone = new PriorityQueue<Node>(pq);
             return pq_clone;
         }
+        
+        public PriorityQueue<Node> getPriorityQueue(){
+            return this.pq;
+        }
+        
+        private HashMap<Character, Integer> map = new HashMap<Character, Integer>();
+        private Node[] tabn = null;
+        private PriorityQueue<Node> pq = null;
 }

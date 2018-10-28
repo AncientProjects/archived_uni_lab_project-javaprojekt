@@ -3,32 +3,39 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package kompresja;
+package View;
+
+import Model.Node;
+
+
 
 /**
  *
- * @author Kappa123
+ * @author Adam Olechno
  */
+
+//class made specifically to print out data for reference
 public class View {
     public void printCodes(Node root, String s){
-        if(root.left == null && root.right == null){
+        if(root.getLeft() == null && root.getRight() == null){
             System.out.println(root.getId() + ": " + s);
             return;
         }
-        printCodes(root.left, s + "0");
-        printCodes(root.right, s + "1");
+        printCodes(root.getLeft(), s + "0");
+        printCodes(root.getRight(), s + "1");
     }
     
     public void printTree(Node root, int i) {
         i++;
-        if(root.right != null)
-            printTree(root.right, i);
+        if(root.getRight() != null)
+            printTree(root.getRight(), i);
         System.out.println("");
         for(int o = i; o > 0; o--)
             System.out.print("  ");
         System.out.print(root.getValue());
-        if(root.left != null)
-            printTree(root.left, i);
+        if(root.getLeft() != null)
+            printTree(root.getLeft(), i);
         
     }
+    
 }

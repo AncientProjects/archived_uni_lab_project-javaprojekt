@@ -3,15 +3,17 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package kompresja;
+package Model;
 
 /**
  *
- * @author asdf123
+ * @author Adam Olechno
  */
+
+//each object equals one tree node
 public class Node {
-    Node() {}
-    Node(char _id, int _value) {
+    public Node() {}
+    public Node(char _id, int _value) {
         id = _id;
         value = _value;
         code = new String(" ");
@@ -27,6 +29,7 @@ public class Node {
         right = node.right;
     }
     
+    //simple getters and setters
     public void setId(char _id){
         id = _id;
     }
@@ -47,10 +50,30 @@ public class Node {
         code = _code;
     }
     
+    public String getCode(){
+        return this.code;
+    }
+    
+    public void setLeft(Node _left){
+        this.left = _left;
+    }
+    
+    public Node getLeft(){
+        return this.left;
+    }
+    
+    public void setRight(Node _right){
+        this.right = _right;
+    }
+    
+    public Node getRight(){
+        return this.right;
+    }
+    
     private char id;
     private int value;
-    public String code;
+    private String code;
     
-    Node left;
-    Node right;
+    private Node left;
+    private Node right;
 }
