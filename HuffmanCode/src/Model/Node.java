@@ -8,6 +8,7 @@ package Model;
 /**
  *
  * @author Adam Olechno
+ * @version 1.2
  */
 
 //each object equals one tree node
@@ -70,10 +71,14 @@ public class Node {
         return this.right;
     }
     
+    //one of the characters in a String
     private char id;
+    //number of times said character appeared in the String
     private int value;
+    //code of said character generated with algorithm
     private String code;
-    
+    //"pointer" to the "child" on the left
     private Node left;
+    //"pointer" to the "child" on the right
     private Node right;
 }

@@ -5,36 +5,65 @@
  */
 package View;
 
-import Model.HuffmanCode;
-import Model.HuffmanDecode;
-import Model.Node;
-import Model.Frequency;
-import Model.Frequency;
 import Model.Comp;
+import Model.Node;
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.HashMap;
 import java.util.PriorityQueue;
 import java.util.Scanner;
+
+
 
 /**
  *
  * @author Adam Olechno
+ * @version 1.2
  */
 
-//class for managing input and output
-public class ManageFiles {
+//class made specifically to print out data
+public class View {
+    
+    //print individual codes for each character/key
+    public void printCodes(Node root, String s){
+        //if it's the last Node in Huffman Tree, then print out generated code
+        if(root.getLeft() == null && root.getRight() == null){
+            System.out.println(root.getId() + ": " + s);
+            return;
+        }
+        //mode recursively through tree
+        printCodes(root.getLeft(), s + "0");
+        printCodes(root.getRight(), s + "1");
+    }
+    
+    //this method prints generated tree for reference; left - top of the tree, right - bottom of the tree
+    public void printTree(Node root, int i) {
+        i++;
+        if(root.getRight() != null)
+            printTree(root.getRight(), i);
+        System.out.println("");
+        for(int o = i; o > 0; o--)
+            System.out.print("  ");
+        System.out.print(root.getValue());
+        if(root.getLeft() != null)
+            printTree(root.getLeft(), i);
+        
+    }
     
     //this method saves huffman code to output file
-    public void saveCodeToFile(String filename, String code, PriorityQueue<Node> pq) {
+    public void saveCodeToFile(String filename, String code, HashMap<Character, Integer> map) {
         try (PrintWriter out = new PrintWriter(filename)) {
+            //first print code to output file
             out.println(code);
-            //saveTreeToFile(out, pq);
-            for(int i = pq.size(); i > 0; i--){
-                out.println(pq.peek().getId() + " " + pq.poll().getValue());
+            //then size of HashMap to be saved
+            out.println(map.size());
+            //for each key in the map, save key and the number of times it appears in input; each one in its own line
+            for (char key : map.keySet())
+            {
+                out.println(key + " " + map.get(key));
             }
         }
         catch(FileNotFoundException ex){
@@ -42,19 +71,10 @@ public class ManageFiles {
         }
     }
     
-    /*//along with this method that saves tree structure underneath the code
-    public void saveTreeToFile(PrintWriter out, Node root){
-        if (root.getLeft() != null)
-            saveTreeToFile(out, root.getLeft());
-        out.println(root.getId() + " " + root.getValue());
-        //out.println(root.getValue());
-        if (root.getRight() != null)
-            saveTreeToFile(out, root.getRight());
-    }*/
-    
     //method for saving decoded code
     public void saveDecodedTextToFile(String filename, String s){
         try (PrintWriter out = new PrintWriter(filename)){
+            //saving decoded content is simple - just save the String to file
             out.println(s);
         }
         catch(FileNotFoundException ex){
@@ -70,7 +90,7 @@ public class ManageFiles {
         try {
             FileReader fileReader = new FileReader(filename);
             BufferedReader bufferedReader = new BufferedReader(fileReader);
-            
+            //read line and then add it to the String that contains everything from input file
             while((line = bufferedReader.readLine()) != null) {
                 s += line + "\n";
             }
@@ -92,7 +112,7 @@ public class ManageFiles {
         try {
             FileReader fileReader = new FileReader(filename);
             BufferedReader bufferedReader = new BufferedReader(fileReader);
-            
+            //read only first line, because only there is the code saved
             code = bufferedReader.readLine();
             
         }
@@ -107,25 +127,34 @@ public class ManageFiles {
     }
     
     //this method is used for reading the tree saved to file, but in the form of priority queue
+    //initially it's saved in the form of a map, but due to problems stemming from reading complete tree or priority queue
+    //it's far simpler to just save and read a map and then just convert it into priority queue and start algorithm from the beginning
     public PriorityQueue<Node> readPriorityQueueFromFile(String filename) {
         String line = "";
         Node node = new Node();
-        int i = 0;
+        PriorityQueue<Node> pq = null;
         
         try {
             FileReader fileReader = new FileReader(filename);
             BufferedReader bufferedReader = new BufferedReader(fileReader);
-            while((line = bufferedReader.readLine()) != null)
-                i++;
-            pq = new PriorityQueue<Node>(i - 1, new Comp());
-            fileReader = new FileReader(filename);
-            bufferedReader = new BufferedReader(fileReader);
-            
+            //first two lines are: code and size of map, so they are not needed now
             line = bufferedReader.readLine();
+            line = bufferedReader.readLine();
+            Scanner scanner = new Scanner(line);
+            //second line contains only the size of map, so it's used in PQ constructor as initial value
+            pq = new PriorityQueue<Node>(scanner.nextInt(), new Comp());
+            //from 3rd line each line contains character and number of times said character appears in the file
             while((line = bufferedReader.readLine()) != null){
-                Scanner scanner = new Scanner(line);
-
+                scanner = new Scanner(line);
+                //for each line one new Node object is constructed
                 node = new Node();
+                //countermeasures for 'newline' character
+                if(line.equals("")){
+                    node.setId('\n');
+                    line = bufferedReader.readLine();
+                    scanner = new Scanner(line);
+                }
+                //reading char and value from current line
                 while(scanner.hasNext()){
                     if(scanner.hasNextInt()){
                         node.setValue(scanner.nextInt());
@@ -134,6 +163,9 @@ public class ManageFiles {
                         node.setId(scanner.next().charAt(0));
                     }
                 }
+                //countermeasures for 'space' character
+                if(node.getId() == '\u0000')
+                    node.setId(' ');
                 pq.add(node);
             }
             
@@ -147,39 +179,4 @@ public class ManageFiles {
         return pq;
     }
     
-    //method for managing console parameters
-    public void consoleControl(String[] args){
-        HuffmanCode hc = new HuffmanCode();
-        try {
-            if (args[2].equals("code")){
-                String s = readTextFromFile(args[0]);
-                
-                
-                PriorityQueue<Node> pq = f.addToPriorityQueue(s);
-                Node root = hc.createTreeFromPriorityQueue(pq);
-                hc.codeCharacters(root, "");
-                String code = hc.codeString(s, f.getPriorityQueue());
-                saveCodeToFile(args[1], code, f.getPriorityQueue());
-            }
-            if (args[2].equals("decode")){
-                String code = readTextFromFile(args[0]);
-                
-                PriorityQueue<Node> pq = readPriorityQueueFromFile(args[0]);
-                Node root = hc.createTreeFromPriorityQueue(pq);
-                HuffmanDecode hd = new HuffmanDecode();
-                String original = hd.decodeHuffman(root, code);
-                saveDecodedTextToFile(args[1], original);
-            }
-            
-            
-            
-        }
-        catch(IndexOutOfBoundsException ex){
-            System.out.println("Not enough parameters ...");
-        }
-    }
-    
-    private Frequency f = new Frequency();
-    
-    private PriorityQueue<Node> pq = null;
 }
